@@ -1,0 +1,20 @@
+{
+  "name": "@ai-compliance/detection-engine",
+  "version": "0.1.1",
+  "private": true,
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@ai-compliance/shared-types": "workspace:*"
+  },
+  "devDependencies": {
+    "vitest": "^3.1.1"
+  }
+}

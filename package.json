@@ -1,0 +1,52 @@
+{
+  "name": "ai-compliance-copilot",
+  "private": true,
+  "version": "0.1.1",
+  "description": "Browser extension that stops sensitive data from leaking into ChatGPT, Claude, Gemini, and Perplexity",
+  "license": "MIT",
+  "author": "Lennard Geißler",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lennardgeissler/ai-compliance-copilot.git"
+  },
+  "homepage": "https://github.com/lennardgeissler/ai-compliance-copilot#readme",
+  "bugs": {
+    "url": "https://github.com/lennardgeissler/ai-compliance-copilot/issues"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky",
+    "oss:export": "node scripts/export-oss.mjs"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml,css}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.2",
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.58.1"
+  }
+}

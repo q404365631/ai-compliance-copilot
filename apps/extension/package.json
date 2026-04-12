@@ -1,0 +1,47 @@
+{
+  "name": "ai-compliance-copilot-extension",
+  "version": "0.1.1",
+  "description": "Browser extension for detecting sensitive data sent to external AI tools",
+  "license": "MIT",
+  "author": "Lennard Geißler",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lennardgeissler/ai-compliance-copilot.git",
+    "directory": "apps/extension"
+  },
+  "homepage": "https://github.com/lennardgeissler/ai-compliance-copilot#readme",
+  "bugs": {
+    "url": "https://github.com/lennardgeissler/ai-compliance-copilot/issues"
+  },
+  "keywords": [
+    "chrome-extension",
+    "browser-extension",
+    "dlp",
+    "privacy",
+    "llm",
+    "chatgpt",
+    "claude",
+    "gemini",
+    "ai-governance",
+    "pii-detection"
+  ],
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "vite build",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@ai-compliance/shared-types": "workspace:*",
+    "@ai-compliance/detection-engine": "workspace:*",
+    "@ai-compliance/policy-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^6.2.0",
+    "typescript": "^5.7.0",
+    "@types/chrome": "^0.0.304",
+    "vitest": "^3.1.1"
+  }
+}

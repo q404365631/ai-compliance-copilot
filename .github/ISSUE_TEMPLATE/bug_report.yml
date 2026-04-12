@@ -1,0 +1,60 @@
+name: Bug report
+description: Something is broken or behaves unexpectedly
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. **Do not** include real PII or secrets in reproduction steps — use synthetic test data.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Clear description of the bug.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ChatGPT
+        2. Paste ...
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Extension version
+      placeholder: "0.2.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome
+        - Edge
+        - Firefox
+        - Brave
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: llm-platform
+    attributes:
+      label: LLM platform (if relevant)
+      placeholder: "ChatGPT / Claude / Gemini / ..."
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console logs / screenshots
+      render: shell

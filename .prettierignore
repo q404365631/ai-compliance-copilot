@@ -1,0 +1,9 @@
+**/dist/**
+**/build/**
+**/.next/**
+**/node_modules/**
+**/coverage/**
+pnpm-lock.yaml
+*.min.js
+*.min.css
+apps/dashboard/
