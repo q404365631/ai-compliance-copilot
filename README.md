@@ -32,7 +32,7 @@ See [docs/](docs/) for architecture, threat model, and privacy details.
 git clone https://github.com/lennardgeissler/ai-compliance-copilot.git
 cd ai-compliance-copilot
 pnpm install
-pnpm --filter extension build
+pnpm --filter ai-compliance-copilot-extension build
 ```
 
 Load in Chrome/Edge:

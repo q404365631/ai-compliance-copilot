@@ -8,16 +8,27 @@ on:
 jobs:
   release:
     name: Build, Release & Publish
-    # Skip commits created by this workflow itself (version bumps)
     if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
 
     steps:
+      # Mint a short-lived token from the release-bot GitHub App so the
+      # version-bump push can bypass the branch ruleset (the App is in the
+      # ruleset bypass list; github-actions[bot] cannot be added there).
+      - name: Generate App token
+        id: app-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.RELEASE_BOT_PRIVATE_KEY }}
+
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
 
@@ -25,6 +36,8 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: "@lennardgeissler"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -42,12 +55,11 @@ jobs:
           node scripts/bump-version.js
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Bumped to $VERSION"
 
       - name: Commit & tag version bump
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name  "release-bot[bot]"
+          git config user.email "release-bot[bot]@users.noreply.github.com"
           git add \
             package.json \
             apps/extension/package.json \
@@ -63,7 +75,6 @@ jobs:
         run: |
           cd apps/extension/dist
           zip -r "${{ github.workspace }}/ai-compliance-extension-v${{ steps.version.outputs.version }}.zip" .
-          echo "Created extension zip"
 
       # ── GitHub Release ────────────────────────────────────────────────────
       - name: Create GitHub Release
@@ -73,3 +84,20 @@ jobs:
           name: v${{ steps.version.outputs.version }}
           generate_release_notes: true
           files: ai-compliance-extension-v${{ steps.version.outputs.version }}.zip
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      # ── GitHub Packages (npm) ─────────────────────────────────────────────
+      # Build a clean publish directory: only the bundled dist + a slim
+      # package.json without workspace:* dev/runtime deps, so the artifact
+      # is installable and visible under the repo's "Packages" tab.
+      - name: Prepare npm publish dir
+        run: node scripts/prepare-npm-publish.mjs
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+
+      - name: Publish to GitHub Packages
+        run: npm publish --access restricted
+        working-directory: .release-publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
